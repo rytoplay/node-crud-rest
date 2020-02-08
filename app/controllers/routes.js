@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var Product = require('./../models/product');
 var router = express.Router();
+var path = require('path');
 
 // SETUP BODYPARSER
 router.use(bodyParser.urlencoded({extended: true}));
@@ -20,7 +21,7 @@ router.use(function (req, res, next) {
 
 //Setup /api'/' - GET - WELCOME PAGE
 router.get('/', function (req, res) {
-    res.sendFile('C:\\Users\\vitor\\WebstormProjects\\node-crud\\app\\views\\index.html');
+    res.sendfile(path.join(__dirname, '../../', 'README.md'));
 });
 
 /* ----------------------------
@@ -38,11 +39,15 @@ router.route('/products')
         products.name = req.body.name;
         products.amount = req.body.amount;
         products.description = req.body.description;
+        products.imageURL = req.body.imageURL;
         //response
         products.save(function (error) {
             if (error)
                 res.status(500).send('Failed to register new product. ERROR: ' + error);
-            res.json({message: "product successfully registered"});
+                console.log('saved. result is', res);
+            res.json({status: "success",
+                      id: products._id
+                    });
         });
     })
     /* ---------------------------------------------------------------------
@@ -80,6 +85,7 @@ router.route('/products/:product_id')
             product.name = req.body.name;
             product.amount = req.body.amount;
             product.description = req.body.description;
+            product.imageURL = req.body.imageURL;
             //save
             product.save(function (error) {
                 if (error)

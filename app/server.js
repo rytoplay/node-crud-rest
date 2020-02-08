@@ -5,12 +5,17 @@
 */
 
 //CALL PACKAGES
+var cors = require('cors');
 var express = require('express');
 var app = express();
 var db = require('./models/db');
 var Router = require('./controllers/routes');
 //RUN SERVER ON PORT 3000
-var port = process.env.port || 3000;
+var port = process.env.port || 8080;
+
+//add cors
+app.use(cors());
+app.options('*', cors());
 
 //setup /api as root route
 app.use('/api', Router);
